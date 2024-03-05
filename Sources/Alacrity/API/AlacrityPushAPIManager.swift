@@ -7,6 +7,6 @@
 
 import Foundation
 
-extension AlacrityAPIManager {
+public struct AlacrityPushAPIManager {
     
 }
