@@ -43,8 +43,7 @@ class AlacrityASManager: NSObject, ASAuthorizationControllerPresentationContextP
         do {
             let authorization = try await withCheckedThrowingContinuation { continuation in
               self.continuation = continuation
-                
-              authController.performRequests()
+                authController.performRequests()
             }
             
             self.continuation = nil
@@ -54,7 +53,6 @@ class AlacrityASManager: NSObject, ASAuthorizationControllerPresentationContextP
               let credentialAssertion = authorization.credential
                 as? ASAuthorizationPlatformPublicKeyCredentialAssertion
             else {
-                print("wtf")
                 return AlacrityResponse(error: "asdf")
             }
             
