@@ -126,7 +126,7 @@ public struct AlacrityAPIManager {
         return AlacrityResponse(data: obj)
     }
     
-    func completeVerification(token: String, verificationId: String, body: [String: Any]) async throws -> AlacrityResponse<AlacrityPasskeyVerificationResponse> {
+    func completeVerification(token: String, verificationId: String, body: [String: Any]) async throws -> AlacrityResponse<AlacrityVerificationResponse> {
         
         let relativeURL = URL(string: self.baseURL + "/v1/verifications/\(verificationId)/responses/")!
         var request = URLRequest(url: relativeURL)
@@ -147,7 +147,7 @@ public struct AlacrityAPIManager {
             return AlacrityResponse(error: "Unable to verify response")
         }
         
-        let obj = try JSONDecoder().decode(AlacrityPasskeyVerificationResponse.self, from: data)
+        let obj = try JSONDecoder().decode(AlacrityVerificationResponse.self, from: data)
         return AlacrityResponse(data: obj)
     }
 }

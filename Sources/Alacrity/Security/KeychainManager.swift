@@ -107,6 +107,22 @@ public class KeychainManager {
         return finalData.base64EncodedString()
     }
     
+    func signChallenge(unsignedChallenge: String) -> String? {
+        guard let privateKey = self.getPrivateKey() else {
+            print("cannot find privateKey")
+            return nil
+        }
+        
+        let challengeData = unsignedChallenge.data(using: .utf8)!
+        
+        var error: Unmanaged<CFError>?
+        guard let signedChallenge = SecKeyCreateEncryptedData(privateKey, .rsaEncryptionOAEPSHA512, challengeData as CFData, &error) as Data? else {
+            return nil
+        }
+        
+        return (signedChallenge as Data).base64EncodedString()
+    }
+    
     public func saveAuthToken(token: String) -> Bool {
         guard let data = token.data(using: .utf8) else { return false }
         

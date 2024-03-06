@@ -16,7 +16,7 @@ public struct AlacrityPasskeyManager {
         self.api = AlacrityAPIManager(baseURL: baseURL, orgAPIKey: orgAPIKey)
     }
     
-    public func verify(username: String, token: String, verificationId: String) async throws -> AlacrityResponse<AlacrityPasskeyVerificationResponse> {
+    public func verify(username: String, token: String, verificationId: String) async throws -> AlacrityResponse<AlacrityVerificationResponse> {
         do {
             let result = try await self.api.getChallengeForVerification(token: token)
             

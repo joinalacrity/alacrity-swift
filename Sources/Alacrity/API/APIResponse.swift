@@ -26,6 +26,30 @@ public struct AlacrityPasskeyComplete: Decodable {
     public var key: String
 }
 
-public struct AlacrityPasskeyVerificationResponse: Decodable {
+public struct AlacrityVerificationResponse: Decodable {
     public var token: String
+}
+
+public struct AlacrityPushChallengeResponse: Decodable {
+    public var challenge: String
+}
+
+public struct AlacrityAuthenticatorResponse: Decodable {
+    var externalId: String
+    var createdAt: Date
+    var updatedAt: Date
+    var accountId: Int
+    var isActive: Bool
+    var kind: String
+    var friendlyName: String
+    
+    private enum CodingKeys : String, CodingKey {
+        case externalId = "external_id"
+        case createdAt = "created_at"
+        case updatedAt = "updated_at"
+        case accountId = "account_id"
+        case isActive = "is_active"
+        case friendlyName = "friendly_name"
+        case kind
+    }
 }
