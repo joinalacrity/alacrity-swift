@@ -9,11 +9,9 @@ import Foundation
 
 public struct AlacrityPushAPIManager {
     let baseURL: String
-    let orgAPIKey: String
     
-    init(baseURL: String, orgAPIKey: String) {
+    public init(baseURL: String) {
         self.baseURL = baseURL
-        self.orgAPIKey = orgAPIKey
     }
     
     public func addPushAuthenticator(token: String, params: AddPushAuthenticatorParams) async throws -> AlacrityResponse<AlacrityAuthenticatorResponse> {
@@ -23,8 +21,16 @@ public struct AlacrityPushAPIManager {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
+        let body: [String: Any] = [
+            "kind": "push",
+            "public_key": params.publicKey,
+            "details": [
+                "name": params.device.name,
+                "model": params.device.model
+            ]
+        ]
         
-        let jsonData = try! JSONEncoder().encode(params)
+        let jsonData = try? JSONSerialization.data(withJSONObject: body)
         request.httpBody = jsonData
         
         let (data, response) = try await URLSession.shared.data(for: request)
@@ -61,9 +67,6 @@ public struct AlacrityPushAPIManager {
             request.httpMethod = "POST"
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            
-            
-            
             
             let (data, response) = try await URLSession.shared.data(for: request)
             guard let httpResponse = response as? HTTPURLResponse,

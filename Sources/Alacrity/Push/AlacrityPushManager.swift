@@ -12,8 +12,8 @@ public struct AlacrityPushManager {
     
     private let api: AlacrityPushAPIManager
     
-    init(api: AlacrityPushAPIManager) {
-        self.api = api
+    public init(baseURL: String) {
+        self.api = AlacrityPushAPIManager(baseURL: baseURL)
     }
     
     public func register(token: String) async -> AlacrityResponse<AlacrityAuthenticatorResponse> {
@@ -48,13 +48,15 @@ public struct AlacrityPushManager {
     public func verify(token: String, action: String, verificationId: String) async -> AlacrityResponse<AlacrityVerificationResponse> {
         do {
             let challenge = try await self.api.getChallengeForPushAuthenticator(token: token)
-            
+            print("challenge is: \(challenge)")
             
             guard let challengeData = challenge.data else {
+                print("unable to get challenge.data")
                 return AlacrityResponse(error: challenge.error)
             }
             
             guard let signedChallenge = KeychainManager.shared.signChallenge(unsignedChallenge: challengeData.challenge) else {
+                print("unable to get sign data")
                 return AlacrityResponse(error: "Unable to sign challenge")
             }
             
@@ -71,5 +73,9 @@ public struct AlacrityPushManager {
         catch {
             return AlacrityResponse(error: error.localizedDescription)
         }
+    }
+    
+    public func getAuthenticators(token: String) async throws -> AlacrityResponse<[AlacrityAuthenticatorResponse]> {
+        return try await api.getAuthenticators(token: token)
     }
 }

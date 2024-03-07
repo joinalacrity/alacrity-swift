@@ -113,14 +113,12 @@ public class KeychainManager {
             return nil
         }
         
-        let challengeData = unsignedChallenge.data(using: .utf8)!
+        let challengeData = unsignedChallenge.data(using: .utf8)! as CFData
         
         var error: Unmanaged<CFError>?
-        guard let signedChallenge = SecKeyCreateEncryptedData(privateKey, .rsaEncryptionOAEPSHA512, challengeData as CFData, &error) as Data? else {
-            return nil
-        }
+        let signedChallenge = SecKeyCreateSignature(privateKey, .rsaSignatureDigestPKCS1v15Raw, challengeData, &error)
         
-        return (signedChallenge as Data).base64EncodedString()
+        return (signedChallenge! as Data).base64EncodedString()
     }
     
     public func saveAuthToken(token: String) -> Bool {

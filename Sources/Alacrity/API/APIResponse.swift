@@ -35,19 +35,17 @@ public struct AlacrityPushChallengeResponse: Decodable {
 }
 
 public struct AlacrityAuthenticatorResponse: Decodable {
-    var externalId: String
-    var createdAt: Date
-    var updatedAt: Date
-    var accountId: Int
-    var isActive: Bool
-    var kind: String
-    var friendlyName: String
+    public var externalId: String
+    public var createdAt: String
+    public var updatedAt: String
+    public var isActive: Bool
+    public var kind: String
+    public var friendlyName: String
     
     private enum CodingKeys : String, CodingKey {
         case externalId = "external_id"
         case createdAt = "created_at"
         case updatedAt = "updated_at"
-        case accountId = "account_id"
         case isActive = "is_active"
         case friendlyName = "friendly_name"
         case kind
